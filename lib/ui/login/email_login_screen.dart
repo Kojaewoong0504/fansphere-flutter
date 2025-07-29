@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../core/theme/colors.dart';
+import '../../core/theme/text_styles.dart';
+import '../../widgets/berry_button.dart';
+import '../../widgets/berry_input.dart';
+import '../../widgets/berry_card.dart';
 
 class EmailLoginScreen extends StatefulWidget {
   const EmailLoginScreen({super.key});
@@ -42,179 +47,184 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        foregroundColor: Colors.black,
-        title: const Text(
-          '이메일 로그인',
-          style: TextStyle(fontWeight: FontWeight.bold),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.darkBackground,
+              AppColors.primaryPurpleDark,
+            ],
+          ),
         ),
-      ),
-      body: Consumer<AuthProvider>(
-        builder: (context, authProvider, child) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 32),
-
-                  // 에러 메시지 표시
-                  if (authProvider.state == AuthState.error) ...[
+        child: SafeArea(
+          child: Column(
+            children: [
+              // AppBar 영역
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
                     Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.red[50],
-                        border: Border.all(color: Colors.red[200]!),
-                        borderRadius: BorderRadius.circular(8),
+                        color: AppColors.cardBackgroundDark.withValues(alpha: 0.8),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.error_outline, color: Colors.red[600]),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              authProvider.errorMessage ?? '오류가 발생했습니다.',
-                              style: TextStyle(color: Colors.red[700]),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close, size: 18),
-                            onPressed: () => authProvider.clearError(),
-                            color: Colors.red[600],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-
-                  // 이메일 입력
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: '이메일',
-                      hintText: 'example@email.com',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.email_outlined),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    enabled: !authProvider.isLoading,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '이메일을 입력하세요';
-                      }
-                      // 더 정확한 이메일 정규식
-                      final emailRegex = RegExp(r'\S+@\S+\.\S+');
-                      if (!emailRegex.hasMatch(value)) {
-                        return '유효한 이메일 형식을 입력하세요';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // 비밀번호 입력
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: "비밀번호",
-                      prefixIcon: const Icon(Icons.lock_outlined),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                      child: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: AppColors.pureWhite,
                         ),
-                        onPressed: () {
-                          setState(() => _obscurePassword = !_obscurePassword);
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      '이메일 로그인',
+                      style: AppTextStyles.titleLarge.darkPrimary,
+                    ),
+                  ],
+                ),
+              ),
+              
+              // 메인 콘텐츠
+              Expanded(
+                child: Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 400),
+                      child: Consumer<AuthProvider>(
+                        builder: (context, authProvider, child) {
+                          return BerryCard(
+                            type: BerryCardType.elevated,
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    '계정으로 로그인',
+                                    style: AppTextStyles.titleLarge.darkPrimary,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '이메일과 비밀번호를 입력해주세요',
+                                    style: AppTextStyles.bodyMedium.darkSecondary,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 32),
+
+                                  // 에러 메시지 표시
+                                  if (authProvider.state == AuthState.error && 
+                                      authProvider.errorMessage != null) ...[
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red.withValues(alpha: 0.1),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: Colors.red.withValues(alpha: 0.3),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.error_outline,
+                                            color: Colors.red.shade400,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Text(
+                                              authProvider.errorMessage!,
+                                              style: AppTextStyles.bodySmall.copyWith(
+                                                color: Colors.red.shade400,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                  ],
+
+                                  // 이메일 입력
+                                  BerryInput.email(
+                                    controller: _emailController,
+                                    onChanged: (_) => _clearErrorIfPresent(authProvider),
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // 비밀번호 입력
+                                  BerryInput.password(
+                                    controller: _passwordController,
+                                    onChanged: (_) => _clearErrorIfPresent(authProvider),
+                                  ),
+                                  const SizedBox(height: 24),
+
+                                  // 로그인 버튼
+                                  BerryButton.primary(
+                                    text: '로그인',
+                                    isFullWidth: true,
+                                    isLoading: authProvider.isLoading,
+                                    onPressed: authProvider.isLoading ? null : _submit,
+                                    icon: const Icon(Icons.login, size: 20),
+                                  ),
+                                  
+                                  const SizedBox(height: 16),
+                                  
+                                  // 하단 링크
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      TextButton(
+                                        onPressed: authProvider.isLoading
+                                            ? null
+                                            : () => context.push('/register'),
+                                        child: Text(
+                                          '회원가입',
+                                          style: AppTextStyles.bodyMedium.primaryPurple,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 1,
+                                        height: 16,
+                                        color: AppColors.cardBorderDark,
+                                      ),
+                                      TextButton(
+                                        onPressed: authProvider.isLoading
+                                            ? null
+                                            : () => context.push('/forgot-password'),
+                                        child: Text(
+                                          '비밀번호 찾기',
+                                          style: AppTextStyles.bodyMedium.secondaryCyan,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),
-                    obscureText: _obscurePassword,
-                    enabled: !authProvider.isLoading,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '비밀번호를 입력하세요';
-                      }
-                      if (value.length < 8) {
-                        return '비밀번호는 8자 이상이어야 합니다';
-                      }
-                      return null;
-                    },
                   ),
-                  const SizedBox(height: 24),
-
-                  // 로그인 버튼
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: authProvider.isLoading ? null : _submit,
-                      child: authProvider.isLoading
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
-                            )
-                          : const Text(
-                              '로그인',
-                              style: TextStyle(
-                                color: Colors.white, 
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  
-                  // 하단 링크
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: authProvider.isLoading
-                            ? null
-                            : () => context.push('/register'),
-                        child: const Text(
-                          '회원가입',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                      const Text('|'),
-                      TextButton(
-                        onPressed: authProvider.isLoading
-                            ? null
-                            : () => context.push('/forgot-password'),
-                        child: const Text(
-                          '비밀번호 찾기',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
-            ),
-          );
-        },
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  void _clearErrorIfPresent(AuthProvider authProvider) {
+    if (authProvider.state == AuthState.error) {
+      authProvider.clearError();
+    }
   }
 }

@@ -423,23 +423,35 @@ class _DemoScreenState extends State<DemoScreen> with TickerProviderStateMixin {
           ),
           const SizedBox(height: 24),
           
-          // Login Form
-          Text('Login Form', style: AppTextStyles.titleMedium.darkPrimary),
+          // Authentication Demo
+          Text('Authentication Demo', style: AppTextStyles.titleMedium.darkPrimary),
           const SizedBox(height: 12),
-          BerryInput.email(
-            controller: _emailController,
-            onChanged: (value) => debugPrint('Email: $value'),
-          ),
-          const SizedBox(height: 16),
-          BerryInput.password(
-            controller: _passwordController,
-            onChanged: (value) => debugPrint('Password length: ${value.length}'),
-          ),
-          const SizedBox(height: 16),
-          BerryButton.primary(
-            text: 'Sign In',
-            isFullWidth: true,
-            onPressed: () => _showSnackBar('Signing in...'),
+          BerryCard(
+            type: BerryCardType.outlined,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Ready to sign in?',
+                  style: AppTextStyles.bodyMedium.darkPrimary,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                BerryButton.primary(
+                  text: 'Go to Login',
+                  isFullWidth: true,
+                  onPressed: () => Navigator.pushNamed(context, '/auth'),
+                  icon: const Icon(Icons.login, size: 20),
+                ),
+                const SizedBox(height: 8),
+                BerryButton.outline(
+                  text: 'Demo Login Form',
+                  isFullWidth: true,
+                  onPressed: () => _showDemoLoginDialog(),
+                  icon: const Icon(Icons.visibility, size: 20),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 24),
           
@@ -913,6 +925,67 @@ class _DemoScreenState extends State<DemoScreen> with TickerProviderStateMixin {
           
           const SizedBox(height: 32),
         ],
+      ),
+    );
+  }
+
+  void _showDemoLoginDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: AppColors.cardBackgroundDark,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.primaryPurple.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Demo Login Form',
+                style: AppTextStyles.headlineMedium.darkPrimary,
+              ),
+              const SizedBox(height: 16),
+              BerryInput.email(
+                controller: _emailController,
+                onChanged: (value) => debugPrint('Email: $value'),
+              ),
+              const SizedBox(height: 16),
+              BerryInput.password(
+                controller: _passwordController,
+                onChanged: (value) => debugPrint('Password length: ${value.length}'),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: BerryButton.outline(
+                      text: 'Cancel',
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: BerryButton.primary(
+                      text: 'Demo Sign In',
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showSnackBar('Demo login - not connected to auth system');
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../../core/theme/text_styles.dart';
 
 class SocialLoginButton extends StatelessWidget {
   final IconData icon;
@@ -23,15 +24,30 @@ class SocialLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 48,
+      height: 56, // Berry 디자인 시스템의 버튼 높이
       child: ElevatedButton.icon(
-        icon: Icon(icon, color: textColor),
-        label: Text(text, style: TextStyle(color: textColor, fontSize: 14)),
+        icon: Icon(
+          icon, 
+          color: textColor,
+          size: 20,
+        ),
+        label: Text(
+          text, 
+          style: AppTextStyles.titleMedium.copyWith(
+            color: textColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          elevation: 0,
+          foregroundColor: textColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16), // Berry 디자인 시스템의 둥근 모서리
+          ),
+          elevation: 2,
+          shadowColor: Colors.black.withValues(alpha: 0.1),
           side: border,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         ),
         onPressed: onPressed,
       ),

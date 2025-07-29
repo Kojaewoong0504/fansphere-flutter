@@ -3,6 +3,8 @@ import 'package:fansphere/ui/auth/register_screen.dart';
 import 'package:fansphere/ui/login/email_login_screen.dart';
 import 'package:fansphere/ui/login/social_login_screen.dart';
 import 'package:fansphere/ui/home/home_screen.dart';
+import 'package:fansphere/screens/auth_screen.dart';
+import 'package:fansphere/screens/demo_screen.dart';
 import 'package:fansphere/providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +20,7 @@ final GoRouter router = GoRouter(
     if (isLoading) return null;
     
     // 인증된 상태에서 로그인 페이지에 있으면 홈으로 이동
-    if (isAuthenticated && (state.uri.path == '/' || state.uri.path == '/login' || state.uri.path == '/email-login')) {
+    if (isAuthenticated && (state.uri.path == '/' || state.uri.path == '/auth' || state.uri.path == '/email-login' || state.uri.path == '/social-login')) {
       return '/home';
     }
     
@@ -30,14 +32,24 @@ final GoRouter router = GoRouter(
     return null;
   },
   routes: [
-    // Auth routes
+    // Social Login (Primary)
     GoRoute(
       path: '/',
       builder: (context, state) => const SocialLoginScreen(),
     ),
     GoRoute(
-      path: '/login',
+      path: '/social-login',
       builder: (context, state) => const SocialLoginScreen(),
+    ),
+    
+    // Berry Design System Routes
+    GoRoute(
+      path: '/auth',
+      builder: (context, state) => const AuthScreen(),
+    ),
+    GoRoute(
+      path: '/demo',
+      builder: (context, state) => const DemoScreen(),
     ),
     GoRoute(
       path: '/email-login',

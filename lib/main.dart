@@ -7,25 +7,22 @@ import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 
 void main() {
-  runApp(const MyApp());
-  // runApp(const BerryMusicApp());
+  runApp(const FanSphereApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  // class BerryMusicApp extends StatefulWidget {
-  //   const BerryMusicApp({super.key});
-  //
-  //   @override
-  //   State<BerryMusicApp> createState() => _BerryMusicAppState();
-  // }
-  //
-  // class _BerryMusicAppState extends State<BerryMusicApp> {
-  //   @override
-  //   void initState() {
-  //     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  //     super.initState();
-  //   }
+class FanSphereApp extends StatefulWidget {
+  const FanSphereApp({super.key});
+
+  @override
+  State<FanSphereApp> createState() => _FanSphereAppState();
+}
+
+class _FanSphereAppState extends State<FanSphereApp> {
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,20 +35,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'FanSphere',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          fontFamily: 'Pretendard',
-          useMaterial3: true,
-        ),
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.dark,
         routerConfig: router,
       ),
-      // return MaterialApp(
-      //   title: 'Berry Music Hub',
-      //   theme: AppTheme.lightTheme,
-      //   darkTheme: AppTheme.darkTheme,
-      //   themeMode: ThemeMode.dark,
-      //   home: const DemoScreen(),
-      //   debugShowCheckedModeBanner: false,
     );
   }
 }
