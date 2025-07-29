@@ -12,7 +12,8 @@ class SocialLoginScreen extends StatefulWidget {
   State<SocialLoginScreen> createState() => _SocialLoginScreenState();
 }
 
-class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProviderStateMixin {
+class _SocialLoginScreenState extends State<SocialLoginScreen>
+    with TickerProviderStateMixin {
   late AnimationController _logoAnimationController;
   late Animation<double> _logoAnimation;
 
@@ -23,13 +24,12 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    _logoAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _logoAnimationController,
-      curve: Curves.easeInOut,
-    ));
+    _logoAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _logoAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
     _logoAnimationController.forward();
   }
 
@@ -47,15 +47,13 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              AppColors.darkBackground,
-              AppColors.primaryPurpleDark,
-            ],
+            colors: [AppColors.darkBackground, AppColors.primaryPurpleDark],
           ),
         ),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
               padding: const EdgeInsets.all(24),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 400),
@@ -67,31 +65,27 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
                       opacity: _logoAnimation,
                       child: Column(
                         children: [
-                          Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppColors.primaryPurpleLight,
-                                  AppColors.secondaryCyanLight,
-                                  AppColors.accentElectricLight,
-                                ],
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primaryPurple.withValues(alpha: 0.3),
-                                  blurRadius: 20,
-                                  spreadRadius: 5,
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // 로고 이미지 (더 큰 크기)
+                              ClipRect(
+                                child: Image.asset(
+                                  'assets/images/fansphereLogo.png',
+                                  width: 200,
+                                  height: 150,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    // 로고 파일이 없을 경우 기본 아이콘 표시
+                                    return const Icon(
+                                      Icons.music_note,
+                                      size: 80,
+                                      color: AppColors.primaryPurple,
+                                    );
+                                  },
                                 ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.music_note,
-                              size: 60,
-                              color: AppColors.textOnPrimary,
-                            ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 24),
                           ShaderMask(
@@ -119,9 +113,9 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 48),
-                    
+
                     // Welcome Text
                     Text(
                       '간편하게 로그인하고 시작하세요',
@@ -129,7 +123,7 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 32),
-                    
+
                     // Social Login Buttons
                     SocialLoginButton(
                       icon: Icons.chat_bubble,
@@ -141,7 +135,7 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     SocialLoginButton(
                       icon: Icons.person,
                       text: '네이버로 계속하기',
@@ -152,7 +146,7 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     SocialLoginButton(
                       icon: Icons.g_mobiledata,
                       text: 'Google로 계속하기',
@@ -164,7 +158,7 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
                       border: BorderSide(color: Colors.grey.shade300),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     SocialLoginButton(
                       icon: Icons.apple,
                       text: 'Apple로 계속하기',
@@ -176,13 +170,15 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
                     ),
 
                     const SizedBox(height: 32),
-                    
+
                     // Divider
                     Row(
                       children: [
                         Expanded(
                           child: Divider(
-                            color: AppColors.cardBorderDark.withValues(alpha: 0.5),
+                            color: AppColors.cardBorderDark.withValues(
+                              alpha: 0.5,
+                            ),
                             thickness: 1,
                           ),
                         ),
@@ -195,15 +191,17 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
                         ),
                         Expanded(
                           child: Divider(
-                            color: AppColors.cardBorderDark.withValues(alpha: 0.5),
+                            color: AppColors.cardBorderDark.withValues(
+                              alpha: 0.5,
+                            ),
                             thickness: 1,
                           ),
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Email Login Button
                     Container(
                       width: double.infinity,
@@ -228,9 +226,9 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Demo Access
                     TextButton(
                       onPressed: () => context.push('/demo'),
@@ -254,9 +252,7 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> with TickerProvid
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         backgroundColor: AppColors.primaryPurple,
         duration: const Duration(seconds: 3),
       ),
